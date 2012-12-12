@@ -1,0 +1,23 @@
+<h1>Listing revisions</h1>
+<% logger.info "revisions: #{@revisions}" %>
+<table>
+  <tr>
+    <th>Diff</th>
+    <th>Authors</th>
+    <th>Timestamp</th>
+    <th>Start</th>
+    <th>End</th>
+  </tr>
+
+<% @revisions.each do |revision| %>
+  <tr>
+    <td><%=raw revision['htmlDiff'] %></td>
+    <td><%= revision['authors'].join(', ') %></td>
+    <td><%= link_to revision['timestamp'], pad_revision_path({ pad_id: @pad_id, id: revision['startRev'] })%></td>
+    <td><%= revision['startRev'] %></td>
+    <td><%= revision['endRev'] %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
