@@ -1,8 +1,7 @@
-<!-- app/view/pads/show.html.erb -->
 <p id="notice"><%= notice %></p>
 <div id="pad" style="width:800px; height:100%"></div>
 <script type="text/javascript">
 $(function () {
-  hackpad.render($('#pad'), <%= raw @pad_opts.to_json.gsub("</", "<\\/") %>, "<%= @signature %>");
+  hackpad.render_url($('#pad'), "<%= raw @pad_url %>");
 });
 </script>

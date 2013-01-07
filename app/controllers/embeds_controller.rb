@@ -3,36 +3,33 @@ class EmbedsController < ApplicationController
 
   # GET /pads/1/embed
   def show
-    @pad_opts = {
-      clientId: HACKPAD_CLIENT_ID,
-      subDomain: 'localdev',
-      padId: params[:pad_id],
-      timestamp: Time.now.to_i,
-      name: "tess euser = ` ~ ! @ # $ % ^ & * ( ) [ ] { } ; : \' \" < > , . / ? | \\",
-      email: 'teuser@hackpad.test'
+    opts = {
+      :padId => params[:pad_id],
+      :email => 'teuser@hackpad.test',
+      :name => 'tess e. user'
     }
-
-    @signature = hackpad_sign embed_signature_data @pad_opts
-
-    respond_with @pad_opts
+    req = hackpad.create_signed_request :get, "/ep/api/embed-pad?#{opts.to_query}", nil, { :scheme => :query_string }
+    respond_with @pad_url = hackpad.uri + req.path
   end
 
   # GET /pads/1/embed/nosig
   def nosig
-    respond_with @padId = params[:pad_id]
+    @pad_subdomain = "localdev"
+    respond_with @pad_id = params[:pad_id]
   end
 
   # GET /pads/1/embed/noemail
   def noemail
-    @pad_opts = {
-      clientId: HACKPAD_CLIENT_ID,
-      subDomain: 'localdev',
-      padId: params[:pad_id],
-      timestamp: Time.now.to_i,
+    opts = {
+      :padId => params[:pad_id]
     }
-
-    @signature = hackpad_sign embed_signature_data @pad_opts
-
+    req = hackpad.create_signed_request :get, "/ep/api/embed-pad?#{opts.to_query}", nil, { :scheme => :query_string }
+    @pad_url = hackpad.uri + req.path
     render :show
+  end
+
+  # GET /pads/1/embed/new
+  def script
+    respond_with @pad_url = "#{hackpad.uri}/#{params[:pad_id]}.js"
   end
 end

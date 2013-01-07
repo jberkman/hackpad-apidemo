@@ -1,8 +1,7 @@
-<!-- app/view/pads/show.html.erb -->
 <p id="notice"><%= notice %></p>
-<div id="pad" style="width:800px; height:100%"></div>
+<div id="embed" style="width:800px; height:100%"></div>
 <script type="text/javascript">
 $(function () {
-  hackpad.render($('#pad'), { padId: '<%= @padId %>' });
+  hackpad.render($('#embed'), "<%= @pad_id %>", "<%= @pad_subdomain %>");
 });
 </script>

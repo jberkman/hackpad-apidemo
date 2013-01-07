@@ -1,4 +1,4 @@
-<%= form_tag('/pads') do %>
+<%= form_tag(@pad_id ? "/pads/#{@pad_id}" : '/pads', :method => @pad_id ? :put : :post) do %>
   <div>
     <%= text_area_tag :content, @content, :rows => 25, :cols => 80 %>
   </div>

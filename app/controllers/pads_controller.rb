@@ -8,10 +8,7 @@ class PadsController < ApplicationController
   def show
     @pad_id = params[:id]
 
-    req = Net::HTTP::Get.new "/api/1.0/pad/#{@pad_id}/content/latest.txt"
-    set_hackpad_authorization req
-
-    res = hackpad_http.request req
+    res = hackpad.request :get, "/api/1.0/pad/#{@pad_id}/content.txt"
 
     if res.is_a? Net::HTTPSuccess
       respond_with @content = res.body
@@ -29,12 +26,7 @@ class PadsController < ApplicationController
   def create
     content = params[:content]
 
-    req = Net::HTTP::Post.new "/api/1.0/pad/create"
-    req['Content-Type'] = 'text/plain'
-    req.body = content
-    set_hackpad_authorization req
-
-    res = hackpad_http.request req
+    res = hackpad.request :post, "/api/1.0/pad/create", nil, {}, content, { 'Content-Type' => 'text/plain' }
 
     if res.is_a? Net::HTTPSuccess
       json = ActiveSupport::JSON.decode res.body
@@ -49,10 +41,7 @@ class PadsController < ApplicationController
   def edit
     @pad_id = params[:id]
 
-    req = Net::HTTP::Get.new "/api/1.0/pad/#{@pad_id}/content/latest.txt"
-    set_hackpad_authorization req
-
-    res = hackpad_http.request req
+    res = hackpad.request :get, "/api/1.0/pad/#{@pad_id}/content/latest.txt"
 
     if res.is_a? Net::HTTPSuccess
       respond_with @content = res.body
@@ -67,15 +56,9 @@ class PadsController < ApplicationController
     @pad_id = params[:id]
     content = params[:content]
 
-    req = Net::HTTP::Post.new "/api/1.0/pad/#{@pad_id}/content"
-    req['content-type'] = 'text/plain'
-    req.body = content
-    set_hackpad_authorization req
-
-    res = hackpad_http.request req
+    res = hackpad.request :post, "/api/1.0/pad/#{@pad_id}/content", nil, {}, content, { 'Content-Type' => 'text/plain' }
 
     if res.is_a? Net::HTTPSuccess
-      json = ActiveSupport::JSON.decode(res.body)
       redirect_to pad_path @pad_id
     else
       logger.warn "#{res.inspect}: #{res.body}"
@@ -85,10 +68,7 @@ class PadsController < ApplicationController
 
   # GET /pads
   def index
-    req = Net::HTTP::Post.new "/api/1.0/pads/all"
-    set_hackpad_authorization req
-
-    res = hackpad_http.request req
+    res = hackpad.request :get, "/api/1.0/pads/all"
 
     if res.is_a? Net::HTTPSuccess
       json = ActiveSupport::JSON.decode(res.body)
