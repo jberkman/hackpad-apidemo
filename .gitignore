@@ -13,5 +13,3 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-
-config/initializers/oauth_consumers.rb
